@@ -1,6 +1,7 @@
 import re
+
+import pydirectinput
 import pyperclip
-import win32api
 
 from Event.Event import Event
 from loguru import logger
@@ -46,40 +47,25 @@ class WindowsEvent(Event):
                 # 约定 [-1, -1] 表示鼠标保持原位置不动
                 pass
             else:
-                # 挪动鼠标 普通做法
-                # ctypes.windll.user32.SetCursorPos(x, y)
-                # or
-                # win32api.SetCursorPos([x, y])
-
-                # 更好的兼容 win10 屏幕缩放问题
-                if isinstance(x, int) and isinstance(y, int):
-                    if numofmonitors > 1:
-                        win32api.SetCursorPos([x, y])
-                    else:
-                        nx = int(x * 65535 / SW)
-                        ny = int(y * 65535 / SH)
-                        win32api.mouse_event(win32con.MOUSEEVENTF_ABSOLUTE | win32con.MOUSEEVENTF_MOVE, nx, ny, 0, 0)
-                else:
-                    nx = int(x * 65535)
-                    ny = int(y * 65535)
-                    win32api.mouse_event(win32con.MOUSEEVENTF_ABSOLUTE | win32con.MOUSEEVENTF_MOVE, nx, ny, 0, 0)
+                pydirectinput.moveTo(int(x*SW), int(y*SH))
 
             if self.message == 'mouse left down':
-                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+                pydirectinput.mouseDown(None, None, 'left')
             elif self.message == 'mouse left up':
-                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+                pydirectinput.mouseUp(None, None, 'left')
             elif self.message == 'mouse right down':
-                win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
+                pydirectinput.mouseDown(None, None, 'right')
             elif self.message == 'mouse right up':
-                win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
+                pydirectinput.mouseUp(None, None, 'right')
             elif self.message == 'mouse middle down':
-                win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0, 0)
+                pydirectinput.mouseDown(None, None, 'middle')
             elif self.message == 'mouse middle up':
-                win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP, 0, 0, 0, 0)
+                pydirectinput.mouseUp(None, None, 'middle')
             elif self.message == 'mouse wheel up':
-                win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, win32con.WHEEL_DELTA, 0)
+                pydirectinput.mouseDown(None, None, 'wheel')
+
             elif self.message == 'mouse wheel down':
-                win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, -win32con.WHEEL_DELTA, 0)
+                pydirectinput.mouseUp(None, None, 'wheel')
             elif self.message == 'mouse move':
                 pass
             else:
@@ -101,21 +87,11 @@ class WindowsEvent(Event):
                 base = win32con.KEYEVENTF_EXTENDEDKEY
 
             if self.message == 'key down':
-                win32api.keybd_event(key_code, 0, base, 0)
+                pydirectinput.keyDown(str.lower(key_name))
             elif self.message == 'key up':
-                win32api.keybd_event(key_code, 0, base | win32con.KEYEVENTF_KEYUP, 0)
+                pydirectinput.keyUp(str.lower(key_name))
             else:
                 logger.warning('Unknown keyboard event:', self.message)
 
         elif self.event_type == 'EX':
-
-            if self.message == 'input':
-                text = self.action
-                pyperclip.copy(text)
-                # Ctrl+V
-                win32api.keybd_event(162, 0, 0, 0)  # ctrl
-                win32api.keybd_event(86, 0, 0, 0)  # v
-                win32api.keybd_event(86, 0, win32con.KEYEVENTF_KEYUP, 0)
-                win32api.keybd_event(162, 0, win32con.KEYEVENTF_KEYUP, 0)
-            else:
-                logger.warning('Unknown extra event:%s' % self.message)
+            return

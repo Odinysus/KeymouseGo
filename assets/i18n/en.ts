@@ -120,6 +120,11 @@
         <source>Ready...</source>
         <translation></translation>
     </message>
+        <message>
+        <location filename="UIView.ui" line="230"/>
+        <source>handle press_always</source>
+        <translation>handle press always</translation>
+    </message>
     <message>
         <location filename="UIView.ui" line="241"/>
         <source>Volume</source>

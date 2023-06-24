@@ -3,30 +3,21 @@
 ################################################################################
 ## Form generated from reading UI file 'UIView.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.3
+## Created by: Qt User Interface Compiler version 5.15.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFormLayout,
-    QGridLayout, QGroupBox, QHBoxLayout, QLabel,
-    QLayout, QMainWindow, QMenuBar, QPushButton,
-    QSizePolicy, QSlider, QSpacerItem, QSpinBox,
-    QStatusBar, QTextEdit, QVBoxLayout, QWidget)
-import assets_rc
+from PySide6.QtCore import *
+from PySide6.QtGui import *
+from PySide6.QtWidgets import *
+
 
 class Ui_UIView(object):
     def setupUi(self, UIView):
         if not UIView.objectName():
             UIView.setObjectName(u"UIView")
-        UIView.resize(652, 601)
+        UIView.resize(652, 476)
         icon = QIcon()
         icon.addFile(u":/pic/Mondrian.png", QSize(), QIcon.Normal, QIcon.Off)
         UIView.setWindowIcon(icon)
@@ -132,7 +123,7 @@ class Ui_UIView(object):
 
         self.verticalLayoutWidget = QWidget(self.centralwidget)
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
-        self.verticalLayoutWidget.setGeometry(QRect(10, 350, 631, 207))
+        self.verticalLayoutWidget.setGeometry(QRect(10, 260, 631, 161))
         self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -256,27 +247,10 @@ class Ui_UIView(object):
 
         self.gridLayout_4.addLayout(self.gridLayout, 0, 1, 1, 1)
 
-        self.groupBox_3 = QGroupBox(self.centralwidget)
-        self.groupBox_3.setObjectName(u"groupBox_3")
-        self.groupBox_3.setGeometry(QRect(10, 260, 631, 80))
-        self.gridLayout_6 = QGridLayout(self.groupBox_3)
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridLayout_6.addItem(self.horizontalSpacer, 0, 1, 1, 1)
-
-        self.press_always_box = QCheckBox(self.groupBox_3)
-        self.press_always_box.setObjectName(u"press_always_box")
-        sizePolicy.setHeightForWidth(self.press_always_box.sizePolicy().hasHeightForWidth())
-        self.press_always_box.setSizePolicy(sizePolicy)
-
-        self.gridLayout_6.addWidget(self.press_always_box, 0, 0, 1, 1)
-
         UIView.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(UIView)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 652, 18))
+        self.menubar.setGeometry(QRect(0, 0, 652, 26))
         UIView.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(UIView)
         self.statusbar.setObjectName(u"statusbar")
@@ -308,7 +282,5 @@ class Ui_UIView(object):
         self.label_theme.setText(QCoreApplication.translate("UIView", u"Theme", None))
         self.label_script.setText(QCoreApplication.translate("UIView", u"Script", None))
         self.bt_open_script_files.setText(QCoreApplication.translate("UIView", u"...", None))
-        self.groupBox_3.setTitle(QCoreApplication.translate("UIView", u"add", None))
-        self.press_always_box.setText(QCoreApplication.translate("UIView", u"handle press_always", None))
     # retranslateUi
 

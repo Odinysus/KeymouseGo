@@ -118,7 +118,12 @@
     <message>
         <location filename="UIView.ui" line="206"/>
         <source>Ready...</source>
-        <translation></translation>
+        <translation>准备中</translation>
+    </message>
+    <message>
+        <location filename="UIView.ui" line="230"/>
+        <source>handle press_always</source>
+        <translation>持续处理按压事件</translation>
     </message>
     <message>
         <location filename="UIView.ui" line="241"/>

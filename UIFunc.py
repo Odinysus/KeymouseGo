@@ -135,7 +135,12 @@ class UIFunc(QMainWindow, Ui_UIView, QtStyleTools):
         self.choice_extension.currentIndexChanged.connect(self.onconfigchange)
         self.choice_theme.currentTextChanged.connect(self.onchangetheme)
         self.choice_script.currentTextChanged.connect(self.onconfigchange)
-
+        data = self.config.value("Config/HandlePressAlways")
+        if data == str(True).lower():
+            self.press_always_box.setCheckState(Qt.CheckState.Checked)
+        else:
+            self.press_always_box.setCheckState(Qt.CheckState.Unchecked)
+        self.press_always_box.stateChanged.connect(self.on_add_change)
         self.onchangetheme()
 
         self.textlog.textChanged.connect(lambda: self.textlog.moveCursor(QTextCursor.End))
@@ -251,7 +256,10 @@ class UIFunc(QMainWindow, Ui_UIView, QtStyleTools):
                 elif 'mouse middle down' == name and hotkeymethod('middle'):
                     return
             else:
+                # print("监听事件：",event)
                 key_name = event.action[1]
+                if key_name is None:
+                    return
                 if event.message == 'key down':
                     # listen for start/stop script
                     # start_name = 'f6'  # as default
@@ -278,7 +286,9 @@ class UIFunc(QMainWindow, Ui_UIView, QtStyleTools):
                     logger.debug('Recorded %s' % event)
                     self.tnumrd.setText(text)
         logger.debug('Initialize at thread ' + str(threading.currentThread()))
+
         Recorder.setuphook()
+        Recorder.set_handle_press_always(self.config.value("Config/HandlePressAlways") == "true")
         Recorder.set_callback(on_record_event)
         Recorder.set_interval(self.mouse_move_interval_ms.value())
 
@@ -299,6 +309,11 @@ class UIFunc(QMainWindow, Ui_UIView, QtStyleTools):
         self.config.setValue("Config/Extension", self.choice_extension.currentText())
         self.config.setValue("Config/Theme", self.choice_theme.currentText())
         self.config.setValue("Config/Script", self.choice_script.currentText())
+
+    def on_add_change(self):
+        self.config.setValue("Config/HandlePressAlways", self.press_always_box.isChecked())
+        Recorder.set_handle_press_always(self.press_always_box.isChecked())
+
 
     def onchangelang(self):
         global scripts_map
@@ -344,7 +359,8 @@ class UIFunc(QMainWindow, Ui_UIView, QtStyleTools):
                         'ExecuteSpeed=100\n'
                         'Language=zh-cn\n'
                         'Extension=Extension\n'
-                        'Theme=light_cyan_500.xml\n')
+                        'Theme=light_cyan_500.xml\n'
+                        'HandlePressAlways=true')
         return QSettings(to_abs_path('config.ini'), QSettings.IniFormat)
 
     def get_script_path(self):
@@ -455,12 +471,12 @@ class RunScriptClass(QThread):
     tnumrdSignal = Signal(str)
     btnSignal = Signal(bool)
 
-    def __init__(self, frame: UIFunc):
+    def __init__(self, frame: UIFunc, handle_press_always=True):
         super().__init__()
         logger.debug('Thread created at thread' + str(threading.currentThread()))
         self.frame = frame
         self.eventPause = False
-
+        self.handle_press_always = handle_press_always
         # 更新控件的槽函数
         self.logSignal.connect(frame.textlog.append)
         self.tnumrdSignal.connect(frame.tnumrd.setText)

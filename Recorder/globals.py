@@ -7,7 +7,7 @@ swapmousemap = {'mouse left down': 'mouse right down', 'mouse left up': 'mouse r
 
 latest_time = -1
 mouse_interval_ms = 200
-
+handle_press_always = True
 
 def current_ts():
     return int(time.time() * 1000)

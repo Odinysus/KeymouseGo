@@ -1,9 +1,9 @@
 # Resource object code (Python 3)
 # Created by: object code
-# Created by: The Resource Compiler for Qt version 5.15.2
+# Created by: The Resource Compiler for Qt version 6.4.3
 # WARNING! All changes made in this file will be lost!
 
-from PySide2 import QtCore
+from PySide6 import QtCore
 
 qt_resource_data = b"\
 \x00\x00\x00\xba\
@@ -39,17 +39,8 @@ qt_resource_struct = b"\
 \x00\x00\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x02\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x00\x0c\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\
-\x00\x00\x01\x80\x8e\x02\xff\x81\
+\x00\x00\x01\x88\xc83[\xfa\
 "
-
-icon = b"\
-iVBORw0KGgoAAAANSUhEUgAAAC\
-AAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAHFJREFUWIXt1j\
-sKgDAQRdF7xY25cpcWC60kioI6Fm/ahHBCMh+BRmGMnAgEWnvPpzK8dv\
-rFCCCAcoD8og4c5Lr6WB3Q3l1TBwLYPuF3YS1gn1HphgEEEABcKERrGy\
-0E3B0HFJg7C1N/f/kTBBBA+Vi+AMkgFEvBPD17AAAAAElFTkSuQmCC\
-"
-
 
 def qInitResources():
     QtCore.qRegisterResourceData(0x03, qt_resource_struct, qt_resource_name, qt_resource_data)

@@ -6,6 +6,9 @@ from loguru import logger
 import Recorder.globals as globalv
 import collections
 from winreg import QueryValueEx, OpenKey, HKEY_CURRENT_USER, KEY_READ
+
+from Recorder.KeyStatus import KeyStatus
+
 # 是否切换主要/次要功能键
 swapmousebuttons = True if QueryValueEx(OpenKey(HKEY_CURRENT_USER,
                                                 r'Control Panel\Mouse',
@@ -23,6 +26,8 @@ datadic = {0x10000: 'x1', 0x20000: 'x2'}
 MyMouseEvent = collections.namedtuple("MyMouseEvent", ["MessageName"])
 
 record_signals = globalv.RecordSignal()
+
+key_status = KeyStatus()
 
 
 # def threadwrapper(func):
@@ -84,20 +89,7 @@ def on_mouse_event(event):
 
 
 def on_keyboard_event(event):
-    # print('MessageName:',event.MessageName)          #同上，共同属性不再赘述
-    # print('Message:',event.Message)
-    # print('Time:',event.Time)
-    # print('Window:',event.Window)
-    # print('WindowName:',event.WindowName)
-    # print('Ascii:', event.Ascii, chr(event.Ascii))   #按键的ASCII码
-    # print('Key:', event.Key)                         #按键的名称
-    # print('KeyID:', event.KeyID)                     #按键的虚拟键值
-    # print('ScanCode:', event.ScanCode)               #按键扫描码
-    # print('Extended:', event.Extended)               #判断是否为增强键盘的扩展键
-    # print('Injected:', event.Injected)
-    # print('Alt', event.Alt)                          #是某同时按下Alt
-    # print('Transition', event.Transition)            #判断转换状态
-    # print('---')
+
 
     message = event.MessageName
     message = message.replace(' sys ', ' ')
@@ -105,6 +97,28 @@ def on_keyboard_event(event):
     all_messages = ('key down', 'key up')
     if message not in all_messages:
         return True
+    if globalv.handle_press_always:
+        if message == 'key down':
+            result = key_status.onKeyDown(event.KeyID)
+            if not result:
+                return False
+        elif message == 'key up':
+            key_status.onKeyUp(event.KeyID)
+
+    # print('MessageName:', event.MessageName)  # 同上，共同属性不再赘述
+    # print('Message:', event.Message)
+    # print('Time:', event.Time)
+    # print('Window:', event.Window)
+    # print('WindowName:', event.WindowName)
+    # print('Ascii:', event.Ascii, chr(event.Ascii))  # 按键的ASCII码
+    # print('Key:', event.Key)  # 按键的名称
+    # print('KeyID:', event.KeyID)  # 按键的虚拟键值
+    # print('ScanCode:', event.ScanCode)  # 按键扫描码
+    # print('Extended:', event.Extended)  # 判断是否为增强键盘的扩展键
+    # print('Injected:', event.Injected)
+    # print('Alt', event.Alt)  # 是某同时按下Alt
+    # print('Transition', event.Transition)  # 判断转换状态
+    # print('---')
 
     key_info = (event.KeyID, event.Key, event.Extended)
 

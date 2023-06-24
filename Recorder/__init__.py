@@ -4,8 +4,6 @@ import Recorder.globals
 
 if system() == 'Windows':
     import Recorder.WindowsRecorder as _Recorder
-elif system() in ['Linux', 'Darwin']:
-    import Recorder.UniversalRecorder as _Recorder
 else:
     raise OSError("Unsupported platform '{}'".format(system()))
 
@@ -17,6 +15,8 @@ def set_callback(callback):
     _Recorder.record_signals.event_signal.connect(callback)
 
 
+def set_handle_press_always(always):
+    globals.handle_press_always = always
 # 槽函数:改变鼠标精度
 @Slot(int)
 def set_interval(value):
