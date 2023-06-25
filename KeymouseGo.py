@@ -76,9 +76,9 @@ def single_run(script_path, run_times=1, speed=100, module_name='Extension'):
             while j < extension.runtimes or extension.runtimes == 0:
                 logger.info('=========== %d ===========' % j)
                 try:
-                    if extension.onbeforeeachloop(j):
+                    if extension.on_begin_loop(j):
                         UIFunc.RunScriptClass.run_script_once(events, extension)
-                    extension.onaftereachloop(j)
+                    extension.on_finish_loop(j)
                     j += 1
                 except BreakProcess:
                     logger.debug('Break')
@@ -87,7 +87,7 @@ def single_run(script_path, run_times=1, speed=100, module_name='Extension'):
                 except EndProcess:
                     logger.debug('End')
                     break
-            extension.onendp()
+            extension.on_end_script()
             logger.info('%s run finish' % path)
         logger.info('Scripts run finish!')
     except Exception as e:

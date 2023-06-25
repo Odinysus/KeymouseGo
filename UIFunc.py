@@ -270,7 +270,7 @@ class UIFunc(QMainWindow, Ui_UIView, QtStyleTools):
                     return
             # 录制事件
             if not (not self.recording or self.running or self.pauserecord):
-                if self.extension.onrecord(event, self.actioncount):
+                if self.extension.on_record_event(event, self.actioncount):
                     if event.event_type == 'EM' and not flag_multiplemonitor:
                         record = [event.delay, event.event_type, event.message]
                         tx, ty = event.action
@@ -548,7 +548,7 @@ class RunScriptClass(QThread):
             self.j = 0
             nointerrupt = True
             logger.debug('Run script..')
-            extension.onbeginp()
+            extension.on_start_script()
             self.frame.playtune('start.wav')
             while (self.j < extension.runtimes or extension.runtimes == 0) and nointerrupt:
                 logger.debug('===========%d==============' % self.j)
@@ -559,12 +559,12 @@ class RunScriptClass(QThread):
                 self.tnumrdSignal.emit('{0}... Looptimes [{1}/{2}]'.format(
                     self.running_text, self.j + 1, extension.runtimes))
                 try:
-                    if extension.onbeforeeachloop(self.j):
+                    if extension.on_begin_loop(self.j):
                         nointerrupt = nointerrupt and RunScriptClass.run_script_once(events, extension, thd=self,
                                                                                      labeldict=labeldict)
                     else:
                         nointerrupt = True
-                    extension.onaftereachloop(self.j)
+                    extension.on_finish_loop(self.j)
                     self.j += 1
                 except BreakProcess:
                     logger.debug('Break')
@@ -573,7 +573,7 @@ class RunScriptClass(QThread):
                 except EndProcess:
                     logger.debug('End')
                     break
-            extension.onendp()
+            extension.on_end_script()
             self.frame.playtune('end.wav')
             if nointerrupt:
                 self.tnumrdSignal.emit('finished')
@@ -686,9 +686,9 @@ class RunScriptClass(QThread):
         while (k < newextension.runtimes or newextension.runtimes == 0) and nointerrupt:
             logger.debug('========%d========' % k)
             try:
-                if newextension.onbeforeeachloop(k):
+                if newextension.on_begin_loop(k):
                     nointerrupt = nointerrupt and RunScriptClass.run_script_once(newevents, newextension, thd=thd, labeldict=labeldict)
-                newextension.onaftereachloop(k)
+                newextension.on_finish_loop(k)
                 k += 1
             except BreakProcess:
                 logger.debug('Break')
@@ -697,7 +697,7 @@ class RunScriptClass(QThread):
             except EndProcess:
                 logger.debug('End')
                 break
-        newextension.onendp()
+        newextension.on_end_script()
         extension.swap = newextension.swap
         if nointerrupt:
             logger.info('Subscript run finish')
@@ -723,13 +723,13 @@ class RunScriptClass(QThread):
             event = events[i]
 
             try:
-                flag = extension.onrunbefore(event, i)
+                flag = extension.on_before_event(event, i)
                 if flag:
                     logger.debug(event)
                     event.execute(thd)
                 else:
                     logger.debug('Skipped %d' % i)
-                extension.onrunafter(event, i)
+                extension.on_after_event(event, i)
                 i = i + 1
             except JumpProcess as jp:
                 if labeldict is not None:

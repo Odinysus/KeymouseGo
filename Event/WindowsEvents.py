@@ -5,7 +5,7 @@ import pyperclip
 
 from Event.Event import Event
 from loguru import logger
-
+from Event.KeyCode import keyCodeMap
 import ctypes
 import win32con
 user32 = ctypes.windll.user32
@@ -87,9 +87,9 @@ class WindowsEvent(Event):
                 base = win32con.KEYEVENTF_EXTENDEDKEY
 
             if self.message == 'key down':
-                pydirectinput.keyDown(str.lower(key_name))
+                pydirectinput.keyDown(keyCodeMap.get(key_code))
             elif self.message == 'key up':
-                pydirectinput.keyUp(str.lower(key_name))
+                pydirectinput.keyUp(keyCodeMap.get(key_code))
             else:
                 logger.warning('Unknown keyboard event:', self.message)
 

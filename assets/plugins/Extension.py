@@ -9,29 +9,29 @@ class Extension:
         self.swap = swap
 
     # 脚本执行前需要做的事
-    def onbeginp(self):
+    def on_start_script(self):
         pass
 
     # 每次录制事件后需要做的事,返回True保存事件
-    def onrecord(self, event, currentindex):
+    def on_record_event(self, event, currentindex):
         return True
 
     # 每次脚本执行前需要做的事,返回True执行本行脚本
-    def onbeforeeachloop(self, currentloop):
+    def on_begin_loop(self, currentloop):
         return True
 
     # 每行脚本执行前需要做的事,返回True执行本行脚本
-    def onrunbefore(self, event, currentindex):
+    def on_before_event(self, event, currentindex):
         return True
 
     # 每行脚本执行后需要做的事
-    def onrunafter(self, event, currentindex):
+    def on_after_event(self, event, currentindex):
         pass
 
     # 每次脚本全部执行完后需要做的事
-    def onaftereachloop(self, currentloop):
+    def on_finish_loop(self, currentloop):
         pass
 
     # 全部循环全部执行完后需要做的事
-    def onendp(self):
+    def on_end_script(self):
         pass
